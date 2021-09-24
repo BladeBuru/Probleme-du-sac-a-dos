@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class SacADos {
     private float poidsMaximal;
-    ArrayList<Box> objetArrayList = new ArrayList<Box>();
-    private ArrayList<Box> objetDansSac = new ArrayList<>();
+    ArrayList<Items> objetArrayList = new ArrayList<Items>();
+    private ArrayList<Items> objetDansSac = new ArrayList<>();
 
     public SacADos() {
     }
@@ -31,9 +31,18 @@ public class SacADos {
         while(scanner.hasNextLine())
         {
             String[] split = scanner.nextLine().split(";");
-            objetArrayList.add(new Box(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
+            objetArrayList.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
         }
         scanner.close();
+    }
+
+    /**
+     * Fonction de trie rapide pours les objets
+     */
+    public ArrayList<Items> quickSort(ArrayList<Items> objetDansSac) {
+        // code
+
+        return objetDansSac;
     }
 
 
@@ -51,11 +60,11 @@ public class SacADos {
     /**
      * Affichage dans la console
      * @param poidsDirect poids contenu dans le sac
-     * @param methode nom de la methode utilisé
+     * @param methode nom de la methode utilise
      */
     public void affichage(float poidsDirect, String methode) {
         System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " dans le sac avec un poids total de " + poidsDirect + "kg.");
-        for (Box box : objetDansSac)
+        for (Items box : objetDansSac)
             System.out.println(box);
     }
 
@@ -64,9 +73,10 @@ public class SacADos {
 
 
     /**
-     * Résoudre goutonne
+     * Resoudre gloutonne
      */
     public void gloutonne() {
+        //objetArrayList = quickSort(objetArrayList); //remplace le sort
         Collections.sort(objetArrayList);
         float poidsDirect = 0;
         int i = 0;
@@ -80,7 +90,7 @@ public class SacADos {
     }
 
     /**
-     * Resoudre exactes dynamique
+     * Resoudre exacte dynamique
      */
     public void exactesDynamique() {
 
