@@ -5,9 +5,12 @@ import java.util.Scanner;
 
 public class SacADos {
     private float poidsMaximal;
-    ArrayList<Items> objetArrayList = new ArrayList<Items>();
+    private ArrayList<Items> objetList = new ArrayList<>();
     private ArrayList<Items> objetDansSac = new ArrayList<>();
 
+    /**
+     * Constructeur vide
+     */
     public SacADos() {
     }
 
@@ -28,33 +31,20 @@ public class SacADos {
     public void loadValue(String chemin) throws FileNotFoundException {
         FileInputStream file = new FileInputStream(chemin);
         Scanner scanner = new Scanner(file);
-        while(scanner.hasNextLine())
-        {
+        while(scanner.hasNextLine()) {
             String[] split = scanner.nextLine().split(";");
-            objetArrayList.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
+            objetList.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
         }
         scanner.close();
     }
 
-    /**
-     * Fonction de trie rapide pours les objets
-     */
-    public ArrayList<Items> quickSort(ArrayList<Items> objetDansSac) {
-        // code
-
-        return objetDansSac;
-    }
-
-
     public static  void main(String[] args) throws IOException {
         SacADos sacADos = new SacADos("src/items.txt", 14);
 
-        for (int i = 0; i < sacADos.objetArrayList.size(); i++) {
-            System.out.println(sacADos.objetArrayList.get(i));
+        for (int i = 0; i < sacADos.objetList.size(); i++) {
+            System.out.println(sacADos.objetList.get(i));
         }
-
         sacADos.gloutonne();
-
     }
 
     /**
@@ -77,12 +67,12 @@ public class SacADos {
      */
     public void gloutonne() {
         //objetArrayList = quickSort(objetArrayList); //remplace le sort
-        Collections.sort(objetArrayList);
+        Collections.sort(objetList);
         float poidsDirect = 0;
         int i = 0;
-        while (poidsDirect < poidsMaximal){
-            objetDansSac.add(objetArrayList.get(i));
-            poidsDirect += objetArrayList.get(i).getPoids();
+        while (objetList.get(i).getPoids() + poidsDirect < poidsMaximal && objetList.size()-1 <= i){
+            objetDansSac.add(objetList.get(i));
+            poidsDirect += objetList.get(i).getPoids();
             System.out.println(poidsDirect);
             i++;
         }
