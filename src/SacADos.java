@@ -1,6 +1,9 @@
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Scanner;
 
 public class SacADos {
@@ -43,8 +46,10 @@ public class SacADos {
 
         for (int i = 0; i < sacADos.objetList.size(); i++) {
             System.out.println(sacADos.objetList.get(i));
-        }
-        sacADos.gloutonne();
+        }*/
+
+        sacADos.exactesDynamique();
+        //sacADos.gloutonne();
     }
 
     /**
@@ -83,8 +88,30 @@ public class SacADos {
      * Resoudre exacte dynamique
      */
     public void exactesDynamique() {
+        int intPoidsMax = (int)poidsMaximal;
+        List<List<Integer>> pointsList = new ArrayList<List<Integer>>();
 
+        System.out.println("------- "+objetList.size());//
+
+        float matrice[][] = new float[objetList.size()][intPoidsMax];
+        for (int i = 0; i < objetList.size() ; i++) {
+              if (objetList.get(i).getPrix() > intPoidsMax)
+                  matrice[i][intPoidsMax] = 0;
+              else
+                  matrice[0][intPoidsMax] = objetList.get(i).getPrix();
+            objetDansSac.add(objetList.get(i));
+
+        }
+
+    afficheTab(matrice);
     }
+/**
+    private float maxPoid(){
+       float pMax = 0 ;
+        for (Items i: objetDansSac )
+            if (i.getPoids() > pMax) pMax = i.getPoids();
+        return pMax;
+    }*/
 
     /**
      * Resoudre exactes PSE
