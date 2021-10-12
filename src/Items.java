@@ -28,6 +28,14 @@ public class Items implements Comparable{
         return poids;
     }
 
+    public float getPrix() {
+        return valeur;
+    }
+
+    public float getMoyenne() {
+        return moyenne;
+    }
+
     @Override
     public String toString() {
         return "Objet{" +

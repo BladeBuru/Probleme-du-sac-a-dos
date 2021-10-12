@@ -65,11 +65,10 @@ public class SacADos {
 
     /**
      * Affichage dans la console
-     * @param poidsDirect poids contenu dans le sac
      * @param methode nom de la methode utilise
      */
-    public void affichage(float poidsDirect, String methode) {
-        System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " dans le sac avec un poids total de " + poidsDirect + "kg.");
+    public void affichage(String methode) {
+       System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " objets dans le sac avec un poids total de " + this.poidDuSac() + "kg sur " + poidsMaximal + "Kg.");
         for (Items box : objetDansSac)
             System.out.println(box);
     }
@@ -88,7 +87,7 @@ public class SacADos {
             System.out.println(poidsDirect);
             i++;
         }
-        affichage(poidsDirect, "glouton");
+        affichage( "glouton");
     }
 
 

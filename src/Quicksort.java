@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Quicksort {
-
-    public int partitionner(ArrayList<Integer> tab, int premier, int dernier, int pivot) {
+/*
+    public int partitionner(ArrayList<Items> tab, int premier, int dernier, int pivot) {
         echanger(tab, pivot, dernier);
         int j = premier;
         for (int i = premier; i <= dernier - 1; i++) {
@@ -15,13 +15,13 @@ public class Quicksort {
         return j;
     }
 
-    public void echanger(ArrayList<Integer> tab, int pivot, int dernier) {
-        int tmp = tab.get(pivot);
+    public void echanger(ArrayList<Items> tab, int pivot, int dernier) {
+        Items tmp = tab.get(pivot);
         tab.set(pivot,tab.get(dernier));
         tab.set(dernier, tmp);
     }
 
-    public void tri_rapide(ArrayList<Integer> tab, int premier, int dernier) {
+    public void tri_rapide(ArrayList<Items> tab, int premier, int dernier) {
         if (premier < dernier) {
             int pivot = (premier+dernier)/2;
             pivot = partitionner(tab, premier, dernier, pivot);
@@ -30,9 +30,9 @@ public class Quicksort {
         }
     }
 
-    public void affiche(ArrayList<Integer> tab){
-        for (int j : tab) {
-            System.out.print(j + ";");
+    public void affiche(ArrayList<Items> tab){
+        for (Items j : tab) {
+            System.out.print(j.getMoyenne() + ";");
         }
     }
 
