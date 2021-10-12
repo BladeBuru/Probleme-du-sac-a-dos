@@ -1,0 +1,2 @@
+Lampe ; 2.0 ; 30.0
+Sac de couchage ; 1.0 ; 20.0
