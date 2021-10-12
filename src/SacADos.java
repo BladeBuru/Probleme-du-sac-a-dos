@@ -1,13 +1,12 @@
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
 public class SacADos {
     private float poidsMaximal;
-    private ArrayList<Items> objetList = new ArrayList<>();
+    private ArrayList<Items> listObjets = new ArrayList<>();
     private ArrayList<Items> objetDansSac = new ArrayList<>();
 
     /**
@@ -17,19 +16,19 @@ public class SacADos {
     }
 
     /**
-     * Constructeur a partir d'un sac et en recopie ses items
-     * @param sacADos
+     * Constructeur a partir dun sac et en recopie ses items
+     * @param sacADos existant
      */
     public SacADos(SacADos sacADos) {
-        objetList = null;
+        listObjets = null;
         objetDansSac = new ArrayList<>();
         poidsMaximal = sacADos.getPoidsMaximal();
-        for (Items box : sacADos.getObjetDansSac())
-            objetDansSac.add(box);
+        for (Items item : sacADos.getObjetDansSac())
+            objetDansSac.add(item);
     }
 
     /**
-     *
+     * Constructeur
      * @param chemin fichier avec les items a charger
      * @param poidsMaximal poids max du sac a dos
      */
@@ -40,153 +39,158 @@ public class SacADos {
 
 
     /**
-     *
-     * @param chemin chemin vers le fichier avec les items a charger
+     * Permet de charger les items
+     * @param chemin chemin vers le fichier avec les items en format texte
      */
-    public void loadValue(String chemin) {
+    private void loadValue(String chemin) {
         try {
             FileInputStream file = new FileInputStream(chemin);
             Scanner scanner = new Scanner(file);
             while(scanner.hasNextLine()) {
                 String[] split = scanner.nextLine().split(";");
-                objetList.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
+                listObjets.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("erreur file not found");
+            System.out.println("Error file not found");
         }
-    }
-
-    public static  void main(String[] args) throws IOException {
-        SacADos sacADos = new SacADos("src/items.txt", 8);
-
-        sacADos.exactesDynamique();
-        sacADos.gloutonne();
-        sacADos.exactesPSE(sacADos);
     }
 
     /**
      *
      * @return Le poids du sac a dos
      */
-    public float poidDuSac(){
-        float pmax =0;
-        for (Items box : objetDansSac)
-            pmax += box.getPoids();
-        return pmax;
+    private float poidsDuSac(){
+        float poidsTotal =0;
+        for (Items item : objetDansSac)
+            poidsTotal += item.getPoids();
+        return poidsTotal;
     }
 
     /**
      *
      * @return Le Prix du sac a dos
      */
-    public float prixDuSac(){
-        float pmax =0;
-        for (Items box : objetDansSac)
-            pmax += box.getPrix();
-        return pmax;
+    private float prixDuSac(){
+        float prixTotal =0;
+        for (Items item : objetDansSac)
+            prixTotal += item.getPrix();
+        return prixTotal;
     }
+
+    /**
+     *
+     * @return La valeur du sac a dos
+     */
     public float valeurDuSac(){
-        float pmax =0;
-        for (Items box : objetDansSac)
-            pmax += box.getValeur();
-        return pmax;
+        float valeurTotal =0;
+        for (Items item : objetDansSac)
+            valeurTotal += item.getValeur();
+        return valeurTotal;
     }
 
     /**
      * Affichage dans la console
      * @param methode nom de la methode utilise
      */
-    public void affichage(String methode) {
-       System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " objets dans le sac avec un poids total de " + this.poidDuSac() + "kg sur " + poidsMaximal + " Kg. D'une valeur de " + valeurDuSac());
-        for (Items box : objetDansSac)
-            System.out.println(box);
+    private void affichage(String methode) {
+       System.out.println("La méthode " + methode + " peu mettre " + this.objetDansSac.size() + " objets dans le sac avec un poids total de " +
+               this.poidsDuSac() + "kg sur " + this.poidsMaximal + " Kg d'une valeur de " + this.valeurDuSac() + ".");
+        for (Items item : objetDansSac)
+            System.out.println(item);
     }
 
     /**
-     * Resoudre gloutonne
+     * Resoudre avec la methode gloutonne
      */
     public void gloutonne() {
-        //objetList = Quicksort.affiche(objetList); //remplace le sort
-        Collections.sort(objetList);
+        Collections.sort(listObjets);
         float poidsDirect = 0;
         int i = 0;
-        while (objetList.get(i).getPoids() + poidsDirect < poidsMaximal && objetList.size()-1 <= i){
-            objetDansSac.add(objetList.get(i));
-            poidsDirect += objetList.get(i).getPoids();
-            System.out.println(poidsDirect);
+        while (listObjets.get(i).getPoids() + poidsDirect < poidsMaximal && listObjets.size()-1 >= i){
+            objetDansSac.add(listObjets.get(i));
+            poidsDirect += listObjets.get(i).getPoids();
             i++;
         }
+
         affichage( "glouton");
     }
 
-
     /**
-     * Resoudre exactes dynamique
+     * Resoudre avec la methode programmation dynamique
      */
     public void exactesDynamique() {
         int intPoidsMax = (int)poidsMaximal;
 
-        float[][] items = new float[objetList.size()][intPoidsMax+1];
+        float[][] items = new float[listObjets.size()][intPoidsMax+1];
         for (int i = 0; i < intPoidsMax+1; i++) {
-            if (objetList.get(0).getPoids() > i)
+            if (listObjets.get(0).getPoids() > i)
                 items[0][i] = 0;
             else
-                items [0][i] = objetList.get(0).getPrix();
+                items [0][i] = listObjets.get(0).getPrix();
         }
 
-        for (int i = 1; i < objetList.size(); i++) {
+        for (int i = 1; i < listObjets.size(); i++) {
             for (int j =0; j < intPoidsMax+1; j++) {
-                if (objetList.get(i).getPoids() > j)
+                if (listObjets.get(i).getPoids() > j)
                     items[i][j] = items[i-1][j];
                 else
-                    items[i][j] = Math.max(items[i-1][j], items[i-1][j-(int)objetList.get(i).getPoids()] + objetList.get(i).getPrix());
+                    items[i][j] = Math.max(items[i-1][j], items[i-1][j-(int) listObjets.get(i).getPoids()] + listObjets.get(i).getPrix());
             }
         }
 
         //affiche la matrice items
+        /*
         for (int i = 0; i < objetList.size(); i++) {
             for (int j =0; j < intPoidsMax +1; j++) {
                 System.out.print(items[i][j] + "\t");
             }
             System.out.println();
         }
+         */
         float j = poidsMaximal;
-        int i = objetList.size()-1;
+        int i = listObjets.size()-1;
         while (j > 0 && i >= 0) {
             while (i > 0 && items[i][(int)j] == items[i-1][(int)j])
                 i--;
-            j = j - objetList.get(i).getPoids();
+            j = j - listObjets.get(i).getPoids();
             if (j > 0)
-                objetDansSac.add(objetList.get(i));
+                objetDansSac.add(listObjets.get(i));
             i--;
         }
+
         affichage( "Exacte dynamique");
     }
 
     /**
-     * Resoudre exactes PSE
+     * Resoudre avec la methode de Procedure par separation et evaluation (PSE)
      */
-    public void exactesPSE(SacADos sacADosOriginel) {
+    public void exactesPSE() {
         SacADos sacADos = new SacADos();
+        this.objetDansSac = recursive(sacADos,0, this).objetDansSac;
 
-        this.objetDansSac = recursive(sacADos,0, sacADosOriginel).objetDansSac;
         affichage("exacte PSE");
     }
 
-    public SacADos recursive(SacADos sacADosHaut,int indice,SacADos sacADosOriginel) {
+    /**
+     *
+     * @param sacADosHaut Represente la branche du haut ou a droite dans un graphe
+     * @param indice hauteur par rapport a l'index
+     * @param sacADosOriginel de depart avec toutes les données
+     * @return un sac a dos remplis le plus efficacement possible avec la Procedure par separation et evaluation
+     */
+    private SacADos recursive(SacADos sacADosHaut,int indice,SacADos sacADosOriginel) {
         SacADos sacADosBas = new SacADos(sacADosHaut);
-        sacADosHaut.objetDansSac.add(sacADosOriginel.objetList.get(indice));
+        sacADosHaut.objetDansSac.add(sacADosOriginel.listObjets.get(indice));
 
-        if (indice >=  sacADosOriginel.objetList.size() -1 ){               // cas ou l'on arrive a la fin
-            if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal()) {
+        if (indice >= sacADosOriginel.listObjets.size() -1) {               // cas ou l'on arrive a la fin
+            if (sacADosHaut.poidsDuSac() > sacADosOriginel.getPoidsMaximal()) {
                     return sacADosBas;
-
-            }else
+            } else
                 return sacADosHaut;
         }
 
-        if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal())//
+        if (sacADosHaut.poidsDuSac() > sacADosOriginel.getPoidsMaximal())
             return recursive(sacADosBas, indice + 1,sacADosOriginel);
 
         SacADos b;
@@ -200,21 +204,19 @@ public class SacADos {
             return b;
     }
 
-    public float getPoidsMaximal() {
+    private float getPoidsMaximal() {
         return poidsMaximal;
     }
 
-    public ArrayList<Items> getObjetDansSac() {
+    private ArrayList<Items> getObjetDansSac() {
         return objetDansSac;
     }
-
-
 
     @Override
     public String toString() {
         return "SacADos{" +
                 "poidsMaximal=" + poidsMaximal +
-                ", objetList=" + objetList +
+                ", objetList=" + listObjets +
                 ", objetDansSac=" + objetDansSac +
                 super.toString() +
                 '}';

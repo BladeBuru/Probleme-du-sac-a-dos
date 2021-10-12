@@ -11,7 +11,7 @@ public class Items implements Comparable{
     }
 
     /**
-     * Constructeur initialisation
+     * Constructeur dinitialisation
      * @param nom de item
      * @param poids de item
      * @param prix de item
@@ -26,16 +26,13 @@ public class Items implements Comparable{
     public float getValeur() {
         return valeur;
     }
+
     public float getPoids() {
         return poids;
     }
 
     public float getPrix() {
         return valeur;
-    }
-
-    public float getMoyenne() {
-        return moyenne;
     }
 
     @Override
@@ -52,11 +49,9 @@ public class Items implements Comparable{
     public int compareTo(Object o) {
         Items b = (Items) o;
         if (this.moyenne < b.moyenne)
-            return -1;
-        if (this.moyenne > b.moyenne)
             return 1;
+        if (this.moyenne > b.moyenne)
+            return -1;
         return 0;
     }
-
-
 }
