@@ -22,8 +22,10 @@ public class SacADos {
      */
     public SacADos(SacADos sacADos) {
         objetList = null;
-        objetDansSac = sacADos.getObjetDansSac();
+        objetDansSac = new ArrayList<>();
         poidsMaximal = sacADos.getPoidsMaximal();
+        for (Items box : sacADos.getObjetDansSac())
+            objetDansSac.add(box);
     }
 
     /**
@@ -56,7 +58,7 @@ public class SacADos {
     }
 
     public static  void main(String[] args) throws IOException {
-        SacADos sacADos = new SacADos("src/items.txt", 8);
+        SacADos sacADos = new SacADos("src/items.txt", 22);
 
         //sacADos.exactesDynamique();
         //sacADos.gloutonne();
@@ -171,9 +173,10 @@ public class SacADos {
         sacADosHaut.objetDansSac.add(sacADosOriginel.objetList.get(indice));
 
         if (indice >=  sacADosOriginel.objetList.size() -1 ){               // cas ou l'on arrive a la fin
-            if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal())
-                return sacADosBas;
-            else
+            if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal()) {
+                    return sacADosBas;
+
+            }else
                 return sacADosHaut;
         }
 
@@ -184,8 +187,9 @@ public class SacADos {
 
         SacADos b;
         SacADos a;
-        a = recursive(sacADosHaut, indice + 1, sacADosOriginel);
         b = recursive(sacADosBas, indice + 1, sacADosOriginel);
+        a = recursive(sacADosHaut, indice + 1, sacADosOriginel);
+
 
         if (a.prixDuSac() > b.prixDuSac())
             return a;
