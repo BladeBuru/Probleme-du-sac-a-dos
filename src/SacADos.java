@@ -17,7 +17,7 @@ public class SacADos {
     }
 
     /**
-     * Constructeur a partir d'un sac
+     * Constructeur a partir d'un sac et en recopie ses items
      * @param sacADos
      */
     public SacADos(SacADos sacADos) {
@@ -58,7 +58,7 @@ public class SacADos {
     }
 
     public static  void main(String[] args) throws IOException {
-        SacADos sacADos = new SacADos("src/items.txt", 22);
+        SacADos sacADos = new SacADos("src/items.txt", 9);
 
         //sacADos.exactesDynamique();
         //sacADos.gloutonne();
@@ -86,13 +86,19 @@ public class SacADos {
             pmax += box.getPrix();
         return pmax;
     }
+    public float valeurDuSac(){
+        float pmax =0;
+        for (Items box : objetDansSac)
+            pmax += box.getValeur();
+        return pmax;
+    }
 
     /**
      * Affichage dans la console
      * @param methode nom de la methode utilise
      */
     public void affichage(String methode) {
-       System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " objets dans le sac avec un poids total de " + this.poidDuSac() + "kg sur " + poidsMaximal + "Kg.");
+       System.out.println("La méthode " + methode + " peu mettre " + objetDansSac.size() + " objets dans le sac avec un poids total de " + this.poidDuSac() + "kg sur " + poidsMaximal + " Kg. D'une valeur de " + valeurDuSac());
         for (Items box : objetDansSac)
             System.out.println(box);
     }
@@ -180,16 +186,13 @@ public class SacADos {
                 return sacADosHaut;
         }
 
-
-                // faut les comparer
-        if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal())
+        if (sacADosHaut.poidDuSac() > sacADosOriginel.getPoidsMaximal())//
             return recursive(sacADosBas, indice + 1,sacADosOriginel);
 
         SacADos b;
         SacADos a;
         b = recursive(sacADosBas, indice + 1, sacADosOriginel);
         a = recursive(sacADosHaut, indice + 1, sacADosOriginel);
-
 
         if (a.prixDuSac() > b.prixDuSac())
             return a;

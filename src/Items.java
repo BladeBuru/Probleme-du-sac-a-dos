@@ -23,7 +23,9 @@ public class Items implements Comparable{
         this.moyenne = prix/poids;
     }
 
-
+    public float getValeur() {
+        return valeur;
+    }
     public float getPoids() {
         return poids;
     }
@@ -55,4 +57,6 @@ public class Items implements Comparable{
             return 1;
         return 0;
     }
+
+
 }
