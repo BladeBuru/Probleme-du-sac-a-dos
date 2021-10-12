@@ -58,10 +58,10 @@ public class SacADos {
     }
 
     public static  void main(String[] args) throws IOException {
-        SacADos sacADos = new SacADos("src/items.txt", 9);
+        SacADos sacADos = new SacADos("src/items.txt", 8);
 
-        //sacADos.exactesDynamique();
-        //sacADos.gloutonne();
+        sacADos.exactesDynamique();
+        sacADos.gloutonne();
         sacADos.exactesPSE(sacADos);
     }
 
