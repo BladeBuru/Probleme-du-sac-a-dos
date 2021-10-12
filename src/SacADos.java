@@ -64,6 +64,28 @@ public class SacADos {
     }
 
     /**
+     *
+     * @return Le poids du sac a dos
+     */
+    public float poidDuSac(){
+        float pmax =0;
+        for (Items box : objetDansSac)
+            pmax += box.getPoids();
+        return pmax;
+    }
+
+    /**
+     *
+     * @return Le Prix du sac a dos
+     */
+    public float prixDuSac(){
+        float pmax =0;
+        for (Items box : objetDansSac)
+            pmax += box.getPrix();
+        return pmax;
+    }
+
+    /**
      * Affichage dans la console
      * @param methode nom de la methode utilise
      */
@@ -171,9 +193,23 @@ public class SacADos {
             return b;
     }
 
+    public float getPoidsMaximal() {
+        return poidsMaximal;
+    }
+
+    public ArrayList<Items> getObjetDansSac() {
+        return objetDansSac;
+    }
+
+
 
     @Override
     public String toString() {
-        return super.toString();
+        return "SacADos{" +
+                "poidsMaximal=" + poidsMaximal +
+                ", objetList=" + objetList +
+                ", objetDansSac=" + objetDansSac +
+                super.toString() +
+                '}';
     }
 }
