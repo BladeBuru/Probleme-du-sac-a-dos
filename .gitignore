@@ -1,0 +1,9 @@
+#ignore configuration idea
+.idea
+
+#ignore out folder
+out
+
+#ignore iml projet
+Projet.iml
+
