@@ -1,9 +1,9 @@
 #ignore configuration idea
-.idea
+/.idea/
 
 #ignore out folder
-out
+/out/
 
 #ignore iml projet
-Projet.iml
+/Projet.iml/
 

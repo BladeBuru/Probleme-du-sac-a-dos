@@ -20,11 +20,11 @@ public class SacADos {
      * @param sacADos existant
      */
     public SacADos(SacADos sacADos) {
-        listObjets = null;
-        objetDansSac = new ArrayList<>();
-        poidsMaximal = sacADos.getPoidsMaximal();
+        this.listObjets = null;
+        this.objetDansSac = new ArrayList<>();
+        this.poidsMaximal = sacADos.getPoidsMaximal();
         for (Items item : sacADos.getObjetDansSac())
-            objetDansSac.add(item);
+            this.objetDansSac.add(item);
     }
 
     /**
@@ -48,11 +48,12 @@ public class SacADos {
             Scanner scanner = new Scanner(file);
             while(scanner.hasNextLine()) {
                 String[] split = scanner.nextLine().split(";");
-                listObjets.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
+                this.listObjets.add(new Items(split[0], Float.parseFloat(split[1]), Float.parseFloat(split[2])));
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Error file not found");
+            System.out.println(e.getMessage());
+            System.exit(1);
         }
     }
 
@@ -62,7 +63,7 @@ public class SacADos {
      */
     private float poidsDuSac(){
         float poidsTotal =0;
-        for (Items item : objetDansSac)
+        for (Items item : this.objetDansSac)
             poidsTotal += item.getPoids();
         return poidsTotal;
     }
@@ -73,7 +74,7 @@ public class SacADos {
      */
     private float prixDuSac(){
         float prixTotal =0;
-        for (Items item : objetDansSac)
+        for (Items item : this.objetDansSac)
             prixTotal += item.getPrix();
         return prixTotal;
     }
@@ -84,7 +85,7 @@ public class SacADos {
      */
     public float valeurDuSac(){
         float valeurTotal =0;
-        for (Items item : objetDansSac)
+        for (Items item : this.objetDansSac)
             valeurTotal += item.getValeur();
         return valeurTotal;
     }
@@ -96,7 +97,7 @@ public class SacADos {
     private void affichage(String methode) {
        System.out.println("La méthode " + methode + " peu mettre " + this.objetDansSac.size() + " objets dans le sac avec un poids total de " +
                this.poidsDuSac() + "kg sur " + this.poidsMaximal + " Kg d'une valeur de " + this.valeurDuSac() + ".");
-        for (Items item : objetDansSac)
+        for (Items item : this.objetDansSac)
             System.out.println(item);
     }
 
@@ -104,12 +105,12 @@ public class SacADos {
      * Resoudre avec la methode gloutonne
      */
     public void gloutonne() {
-        Collections.sort(listObjets);
+        Collections.sort(this.listObjets);
         float poidsDirect = 0;
         int i = 0;
-        while (listObjets.get(i).getPoids() + poidsDirect < poidsMaximal && listObjets.size()-1 >= i){
-            objetDansSac.add(listObjets.get(i));
-            poidsDirect += listObjets.get(i).getPoids();
+        while (this.listObjets.get(i).getPoids() + poidsDirect < this.poidsMaximal && this.listObjets.size()-1 >= i){
+            this.objetDansSac.add(this.listObjets.get(i));
+            poidsDirect += this.listObjets.get(i).getPoids();
             i++;
         }
 
@@ -120,22 +121,22 @@ public class SacADos {
      * Resoudre avec la methode programmation dynamique
      */
     public void exactesDynamique() {
-        int intPoidsMax = (int)poidsMaximal;
+        int intPoidsMax = (int)this.poidsMaximal;
 
-        float[][] items = new float[listObjets.size()][intPoidsMax+1];
+        float[][] items = new float[this.listObjets.size()][intPoidsMax+1];
         for (int i = 0; i < intPoidsMax+1; i++) {
-            if (listObjets.get(0).getPoids() > i)
+            if (this.listObjets.get(0).getPoids() > i)
                 items[0][i] = 0;
             else
-                items [0][i] = listObjets.get(0).getPrix();
+                items [0][i] = this.listObjets.get(0).getPrix();
         }
 
-        for (int i = 1; i < listObjets.size(); i++) {
+        for (int i = 1; i < this.listObjets.size(); i++) {
             for (int j =0; j < intPoidsMax+1; j++) {
-                if (listObjets.get(i).getPoids() > j)
+                if (this.listObjets.get(i).getPoids() > j)
                     items[i][j] = items[i-1][j];
                 else
-                    items[i][j] = Math.max(items[i-1][j], items[i-1][j-(int) listObjets.get(i).getPoids()] + listObjets.get(i).getPrix());
+                    items[i][j] = Math.max(items[i-1][j], items[i-1][j-(int) this.listObjets.get(i).getPoids()] + this.listObjets.get(i).getPrix());
             }
         }
 
@@ -148,14 +149,14 @@ public class SacADos {
             System.out.println();
         }
          */
-        float j = poidsMaximal;
-        int i = listObjets.size()-1;
+        float j = this.poidsMaximal;
+        int i = this.listObjets.size()-1;
         while (j > 0 && i >= 0) {
             while (i > 0 && items[i][(int)j] == items[i-1][(int)j])
                 i--;
-            j = j - listObjets.get(i).getPoids();
-            if (j > 0)
-                objetDansSac.add(listObjets.get(i));
+            j = j - this.listObjets.get(i).getPoids();
+            if (j >= 0)
+                this.objetDansSac.add(this.listObjets.get(i));
             i--;
         }
 
@@ -205,19 +206,19 @@ public class SacADos {
     }
 
     private float getPoidsMaximal() {
-        return poidsMaximal;
+        return this.poidsMaximal;
     }
 
     private ArrayList<Items> getObjetDansSac() {
-        return objetDansSac;
+        return this.objetDansSac;
     }
 
     @Override
     public String toString() {
         return "SacADos{" +
-                "poidsMaximal=" + poidsMaximal +
-                ", objetList=" + listObjets +
-                ", objetDansSac=" + objetDansSac +
+                "poidsMaximal=" + this.poidsMaximal +
+                ", objetList=" + this.listObjets +
+                ", objetDansSac=" + this.objetDansSac +
                 super.toString() +
                 '}';
     }
